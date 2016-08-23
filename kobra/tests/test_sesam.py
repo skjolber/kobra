@@ -17,7 +17,7 @@ def sesam_response_factory(student):
         name=student.name,
         union=student.union.name if student.union else None,
         section_code=student.section.code if student.section else None,
-        nor_edu_person_lin=student.id,
+        nor_edu_person_lin=student.nor_edu_person_lin,
         liu_lin=student.liu_lin,
         email=student.email
     )
@@ -41,7 +41,8 @@ class SesamTests(TestCase):
             student = Student.objects.get(liu_id=mock_sesam_response.liu_id,
                                           use_sesam=True)
         student.refresh_from_db()  # Make sure the changes are persisted
-        self.assertEqual(student.id, mock_sesam_response.nor_edu_person_lin)
+        self.assertEqual(student.nor_edu_person_lin,
+                         mock_sesam_response.nor_edu_person_lin)
 
     def test_get_with_local(self):
         # With local entry.
@@ -58,7 +59,8 @@ class SesamTests(TestCase):
             with mock.patch('kobra.models.Student.is_outdated',
                             new_callable=mock.PropertyMock, return_value=False):
                 unchanged_student = Student.objects.get(
-                    id=mock_sesam_response.nor_edu_person_lin, use_sesam=True)
+                    nor_edu_person_lin=mock_sesam_response.nor_edu_person_lin,
+                    use_sesam=True)
 
         self.assertEqual(unchanged_student.union, None)
         unchanged_student.refresh_from_db()
@@ -69,7 +71,8 @@ class SesamTests(TestCase):
             with mock.patch('kobra.models.Student.is_outdated',
                             new_callable=mock.PropertyMock, return_value=True):
                 changed_student = Student.objects.get(
-                    id=mock_sesam_response.nor_edu_person_lin, use_sesam=True)
+                    nor_edu_person_lin=mock_sesam_response.nor_edu_person_lin,
+                    use_sesam=True)
 
         self.assertEqual(changed_student.union, new_union)
         changed_student.refresh_from_db()

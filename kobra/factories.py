@@ -68,7 +68,7 @@ class StudentFactory(factory.DjangoModelFactory):
 
     email = factory.Faker('email')
 
-    id = factory.LazyFunction(uuid.uuid4)
+    nor_edu_person_lin = factory.LazyFunction(uuid.uuid4)
     liu_lin = factory.LazyFunction(uuid.uuid4)
 
     class Meta:

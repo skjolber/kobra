@@ -180,7 +180,7 @@ const reducer = (state = initialState, action) => {
             .setIn(['meta', path, 'searchString'], '')
             .set(path, Map.of(
               'url', action.payload.url,
-              'id', action.payload.id,
+              'norEduPersonLin', action.payload.nor_edu_person_lin,
               'name', action.payload.name,
               'liuId', action.payload.liu_id,
               'union', action.payload.union,

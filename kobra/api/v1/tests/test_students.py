@@ -23,7 +23,8 @@ class StudentApiTests(APITestCase):
         self.client.force_authenticate(user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], str(student.id))
+        self.assertEqual(response.data['nor_edu_person_lin'],
+                         str(student.nor_edu_person_lin))
 
     def test_update_unauthenticated(self):
         student = factories.StudentFactory()

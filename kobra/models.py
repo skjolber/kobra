@@ -12,7 +12,7 @@ from .db_fields import IdField, MoneyField, NameField
 
 def update_or_create_from_sesam(student=None, **kwargs):
     sesam_student = settings.SESAM_STUDENT_SERVICE_CLIENT.get_student(
-        nor_edu_person_lin=kwargs.pop('id', None),
+        nor_edu_person_lin=kwargs.pop('nor_edu_person_lin', None),
         liu_id=kwargs.pop('liu_id', None),
         mifare_id=kwargs.pop('mifare_id', None),
         national_id=kwargs.pop('national_id', None),
@@ -24,10 +24,12 @@ def update_or_create_from_sesam(student=None, **kwargs):
 
     if not student:
         try:
-            student = Student.objects.get(id=sesam_student.nor_edu_person_lin)
+            student = Student.objects.get(
+                nor_edu_person_lin=sesam_student.nor_edu_person_lin)
         except Student.DoesNotExist:
             # Just instantiate, don't save.
-            student = Student(id=sesam_student.nor_edu_person_lin)
+            student = Student(
+                nor_edu_person_lin=sesam_student.nor_edu_person_lin)
 
     student.email = sesam_student.email
     student.liu_id = sesam_student.liu_id
@@ -187,11 +189,13 @@ class StudentQuerySet(models.QuerySet):
 
 
 class Student(models.Model):
-    id = IdField(default=None,  # Only accept explicitly set IDs
-                 help_text=_("This ID is the same as the student's "
-                             "norEduPersonLIN. It will never change and thus "
-                             "can be used to integrate with other systems also "
-                             "utilizing the norEduPersonLIN."))
+    nor_edu_person_lin = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        verbose_name=_('norEduPersonLIN'),
+        help_text=_("Local identity number. It will never change and thus can "
+                    "be used to integrate with other systems also utilizing "
+                    "the norEduPersonLIN."))
 
     name = NameField(
         max_length=128)
@@ -231,8 +235,10 @@ class Student(models.Model):
     objects = StudentQuerySet.as_manager()
 
     class Meta:
-        verbose_name = _('person')
-        verbose_name_plural = _('people')
+        verbose_name = _('student')
+        verbose_name_plural = _('students')
+
+        ordering = ['liu_id']
 
     def __str__(self):
         return self.liu_id
@@ -246,7 +252,8 @@ class Student(models.Model):
         return self.time_since_last_update >= settings.SESAM_DATA_AGE_THRESHOLD
 
     def update_from_sesam(self):
-        update_or_create_from_sesam(student=self, id=self.id)
+        update_or_create_from_sesam(student=self,
+                                    nor_edu_person_lin=self.nor_edu_person_lin)
 
 
 class TicketType(models.Model):

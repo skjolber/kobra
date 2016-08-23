@@ -118,7 +118,7 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         model = Student
         fields = [
             'url',
-            'id',
+            'nor_edu_person_lin',
             'liu_id',
             'name',
             'union',
