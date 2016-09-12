@@ -10,6 +10,7 @@ export const actionTypes = {
   GET_STUDENT: 'GET_STUDENT',
   GET_TICKET_TYPES: 'GET_TICKET_TYPES',
   GET_UNIONS: 'GET_UNIONS',
+  GET_USERS: 'GET_USERS',
   LOG_IN: 'LOG_IN',
   LOG_OUT: 'LOG_OUT',
   REGISTER_DISCOUNT: 'REGISTER_DISCOUNT',
@@ -76,7 +77,9 @@ export const getStudent = ({successCallback=null, failureCallback=null}={}) => (
 
 export const getStudentAndDiscountRegistrations = () => (dispatch, getState) => {
   dispatch(getStudent({successCallback: () => {
-    dispatch(getDiscountRegistrations())
+    if (selectors.getSelectedEvent(getState())) {
+      dispatch(getDiscountRegistrations())
+    }
   }}))
 }
 
@@ -92,6 +95,12 @@ export const getUnions = () => (dispatch, getState) => apiRequestDispatcher(
   dispatch, getState
 )
 
+export const getUsers = () => (dispatch, getState) => apiRequestDispatcher(
+  actionTypes.GET_USERS,
+  apiAdapter(getState()).get('users/'),
+  dispatch, getState
+)
+
 export const getStaticEntities = () => (dispatch, getState) => {
   dispatch(getDiscounts())
   dispatch(getEvents())
@@ -99,6 +108,7 @@ export const getStaticEntities = () => (dispatch, getState) => {
   dispatch(getSections())
   dispatch(getTicketTypes())
   dispatch(getUnions())
+  dispatch(getUsers())
 }
 
 export const logIn = () => (dispatch, getState) => {

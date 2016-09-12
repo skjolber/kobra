@@ -36,6 +36,8 @@ const routes = (
     <IndexRoute component={components.Home} title="Home" />
     <Route path="lookup-register/" component={components.LookUpRegister}
            title="Look up and register" />
+    <Route path="events/:eventId/" component={components.EventDetail}
+           title="Organizations and events"/>
     <Route path="*" component={components.Error404} title="Page not found" />
   </Route>
 )
