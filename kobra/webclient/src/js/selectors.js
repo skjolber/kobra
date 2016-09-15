@@ -56,12 +56,20 @@ export const getEmail = (state) => (
   state.getIn(['auth', 'email'])
 )
 
+export const getEventTicketTypes = (state, eventUrl) => (
+  getAllTicketTypes(state).filter((t) => (t.get('event') === eventUrl))
+)
+
 export const getEventWithId = (state, eventId) => (
   getAllEvents(state).find((e) => (e.get('id') === eventId))
 )
 
 export const getLogInError = (state) => (
   state.getIn(['auth', '_error'])
+)
+
+export const getOrganizationWithId = (state, organizationId) => (
+  getAllOrganizations(state).filter((o) => (o.get('id') === organizationId))
 )
 
 export const getOrganizationEvents = (state, organizationUrl) => (
@@ -128,9 +136,9 @@ export const getUnion = (state, ref) => {
   }
 }
 
-export const getTicketTypeDiscounts = (state, ticketType) => (
-  getAllDiscounts(state).filter((discount) => (
-    discount.get('ticketType') === ticketType.get('url')
+export const getTicketTypeDiscounts = (state, ticketTypeUrl) => (
+  getAllDiscounts(state).filter((d) => (
+    d.get('ticketType') === ticketTypeUrl
   ))
 )
 
