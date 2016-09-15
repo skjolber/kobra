@@ -52,7 +52,8 @@ class Discount(models.Model):
     union = models.ForeignKey(
         'Union',
         related_name='discounts')
-    amount = MoneyField()
+    amount = MoneyField(
+        default=0)
 
     class Meta:
         unique_together = [['ticket_type', 'union']]
@@ -277,6 +278,12 @@ class TicketType(models.Model):
 
     def __str__(self):
         return '{} / {}'.format(self.event, self.name)
+
+    def save(self, *args, **kwargs):
+        super(TicketType, self).save(*args, **kwargs)
+
+        for union in Union.objects.all():
+            Discount.objects.create(ticket_type=self, union=union)
 
 
 class Union(models.Model):
