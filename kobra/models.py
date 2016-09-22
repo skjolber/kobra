@@ -232,8 +232,8 @@ class Student(models.Model):
     objects = StudentQuerySet.as_manager()
 
     class Meta:
-        verbose_name = _('person')
-        verbose_name_plural = _('people')
+        verbose_name = _('student')
+        verbose_name_plural = _('students')
 
     def __str__(self):
         return self.liu_id
@@ -352,6 +352,11 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
+    class Meta:
+        permissions = [
+            ['view_user', _('Can view user')]
+        ]
 
     def __str__(self):
         return self.email

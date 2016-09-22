@@ -40,7 +40,7 @@ const routes = (
     <Route path="events/:eventId/" component={components.EventDetail} />
     <Route path="organizations/new/" component={components.OrganizationDetail} />
     <Route path="organizations/:organizationId/" component={components.OrganizationDetail} />
-    <Route path="*" component={components.Error404} title="Page not found" />
+    <Route path="*" component={components.Error404} />
   </Route>
 )
 

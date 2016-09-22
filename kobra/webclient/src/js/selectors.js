@@ -48,6 +48,10 @@ export const getAllUnions = (state) => (
   state.get('unions').filter(isNotMeta)
 )
 
+export const getAllUsers = (state) => (
+  state.get('users').filter(isNotMeta)
+)
+
 export const getDiscount = (state, discountUrl) => (
   getAllDiscounts(state).get(discountUrl)
 )
@@ -69,7 +73,7 @@ export const getLogInError = (state) => (
 )
 
 export const getOrganizationWithId = (state, organizationId) => (
-  getAllOrganizations(state).filter((o) => (o.get('id') === organizationId))
+  getAllOrganizations(state).find((o) => (o.get('id') === organizationId))
 )
 
 export const getOrganizationEvents = (state, organizationUrl) => (

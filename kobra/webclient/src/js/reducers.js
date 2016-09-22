@@ -16,7 +16,7 @@ const apiRequestStatusReducer = (state, action, path) => {
 const apiRequestReducer = (state, action, path,
                            successReducer=(state, action, path) => (
                              action.payload.reduce((state, item) => (
-                               state.setIn([path, item.url], fromJS(item))
+                               state.setIn([path, item.url], fromJS(item).set('_changes', Map()))
                              ), state)
                            ),
                            failureReducer=(state, action, path) => (state),
@@ -157,6 +157,12 @@ const reducer = (state = initialState, action) => {
         .setIn(['events', '_active'], action.payload)
         .set('students', initialState.get('students'))
         .set('discountRegistrations', initialState.get('discountRegistrations'))
+
+    case actionTypes.SET_ORGANIZATION_ADMINS:
+      return state.setIn(['organizations', action.payload.organizationUrl, '_changes', 'admins'], fromJS(action.payload.adminUrls))
+
+    case actionTypes.SET_ORGANIZATION_NAME:
+      return state.setIn(['organizations', action.payload.organizationUrl, '_changes', 'name'], fromJS(action.payload.value))
 
     case actionTypes.SET_PASSWORD:
       return state.setIn(['auth', 'password'], action.payload)

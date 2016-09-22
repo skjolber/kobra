@@ -128,7 +128,7 @@ class SesamStudentServiceClient(suds.client.Client):
                 data.StudentUnion and
                 data.StudentUnion not in EXCLUDED_SECTION_CODES
             ) else None,
-            email=str(data.EmailAddress),
+            email=str(data.EmailAddress) if data.EmailAddress else None,
             nor_edu_person_lin=uuid.UUID(data.norEduPersonLIN),
             liu_lin=uuid.UUID(data.LiULIN)
         )

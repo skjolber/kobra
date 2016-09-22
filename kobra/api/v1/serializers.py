@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 
+from django.db.models import Count
+from django.db.models.functions import Trunc
 from django.utils.translation import ugettext_lazy as _
+from rest_auth.serializers import PasswordResetSerializer
 
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ... import predicates
 from ...models import (Discount, DiscountRegistration, Event, Organization,
@@ -30,6 +34,40 @@ class DiscountSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError(_(_("Unauthorized to use "
                                                   "specified ticket type")))
         return value
+
+
+class DiscountStatisticsSerializer(serializers.HyperlinkedModelSerializer):
+    discount = serializers.HyperlinkedIdentityField('discount-detail')
+    resolution = serializers.SerializerMethodField()
+    data_points = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Discount
+        fields = [
+            'url',
+            'discount',
+            'resolution',
+            'data_points'
+        ]
+        extra_kwargs = {
+            'url': {
+                'view_name': 'discount-statistics'
+            }
+        }
+
+    def get_resolution(self, obj):
+        # This is hard coded for now, i.e. changing this won't actually change
+        # the resolution.
+        return 'day'
+
+    def get_data_points(self, obj):
+        return obj.discount_registrations\
+            .order_by()\
+            .annotate(date_time=Trunc('timestamp', 'day'))\
+            .values('date_time')\
+            .annotate(count=Count('id'))\
+            .values('date_time', 'count')\
+            .order_by('date_time')
 
 
 class DiscountRegistrationSerializer(serializers.HyperlinkedModelSerializer):
@@ -99,7 +137,8 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'url',
             'id',
-            'name'
+            'name',
+            'admins'
         ]
 
 
@@ -170,9 +209,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'email'
         ]
 
+    def create(self, validated_data):
+        instance = super(UserSerializer, self).create(
+            validated_data=validated_data)
+        PasswordResetSerializer
+
 
 def jwt_response_payload_handler(token, user=None, request=None):
     return OrderedDict(
         token=token,
-        user=UserSerializer(user, context={'request': request}).data
+        user=reverse('v1:user-detail', kwargs={'pk': user.pk}, request=request)
     )

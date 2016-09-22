@@ -4,8 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 import rest_framework.filters
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import detail_route
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.response import Response
 
 from ... import models
 from . import serializers, filters
@@ -33,6 +35,12 @@ class DiscountViewSet(RegistrationsDeleteProtectedMixin, viewsets.ModelViewSet):
     queryset = models.Discount.objects.all()
     serializer_class = serializers.DiscountSerializer
     filter_backends = [filters.DiscountPermissionFilter]
+
+    @detail_route(methods=['get'])
+    def statistics(self, request, pk=None):
+        discount = self.get_object()
+        serializer = serializers.DiscountStatisticsSerializer(instance=discount, context={'request': request})
+        return Response(serializer.data)
 
 
 class DiscountRegistrationViewSet(NoUpdateModelViewSet):

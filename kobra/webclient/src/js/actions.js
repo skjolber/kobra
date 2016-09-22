@@ -16,6 +16,8 @@ export const actionTypes = {
   REGISTER_DISCOUNT: 'REGISTER_DISCOUNT',
   SET_EMAIL: 'SET_EMAIL',
   SET_EVENT: 'SET_EVENT',
+  SET_ORGANIZATION_ADMINS: 'SET_ORGANIZATION_ADMINS',
+  SET_ORGANIZATION_NAME: 'SET_ORGANIZATION_NAME',
   SET_PASSWORD: 'SET_PASSWORD',
   SET_STUDENT_SEARCH_STRING: 'SET_STUDENT_SEARCH_STRING',
   UNREGISTER_DISCOUNT: 'UNREGISTER_DISCOUNT'
@@ -182,6 +184,22 @@ export const setEmail = (value) => ({
 export const setEvent = (value) => ({
   type: actionTypes.SET_EVENT,
   payload: value || null  // Change empty strings from HTML forms to null
+})
+
+export const setOrganizationAdmins = (organizationUrl, adminUrls) => ({
+  type: actionTypes.SET_ORGANIZATION_ADMINS,
+  payload: {
+    organizationUrl,
+    adminUrls
+  }
+})
+
+export const setOrganizationName = (organizationUrl, value) => ({
+  type: actionTypes.SET_ORGANIZATION_NAME,
+  payload: {
+    organizationUrl,
+    value
+  }
 })
 
 export const setPassword = (value) => ({
