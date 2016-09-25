@@ -8,6 +8,9 @@ gunicorn==19.6.*
 django==1.10.*
 psycopg2==2.6.*
 
+# Async task queue
+celery==3.1.*
+
 # ReST API
 djangorestframework==3.4.*
 django-rest-auth==0.8.*
