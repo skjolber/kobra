@@ -37,6 +37,15 @@ INSTALLED_APPS = [
     'kobra'
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'OPTIONS': {
+            "CLIENT_CLASS": 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
 # todo: change this to use the new MIDDLEWARE setting when Opbeat is updated to
 # work with it
 MIDDLEWARE_CLASSES = [

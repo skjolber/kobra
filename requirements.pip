@@ -6,7 +6,10 @@ gunicorn==19.6.*
 
 # Newest Django release
 django==1.10.*
+
+# Database and cache
 psycopg2==2.6.*
+django-redis==4.5.*
 
 # Async task queue
 celery==3.1.*
