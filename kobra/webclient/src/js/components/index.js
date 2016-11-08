@@ -1,4 +1,5 @@
 export * from './App'
+export {default as CompleteLogIn} from './CompleteLogIn'
 export * from './Error404'
 export * from './EventDetail'
 export * from './EventSelectField'

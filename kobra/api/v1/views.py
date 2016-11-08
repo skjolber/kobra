@@ -8,6 +8,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
+from rest_social_auth.views import BaseSocialAuthView, JWTAuthMixin
 
 from ... import models
 from . import serializers, filters
@@ -112,3 +113,8 @@ class UnionViewSet(viewsets.ReadOnlyModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
+
+
+class UserTokenView(JWTAuthMixin, BaseSocialAuthView):
+    # Used for social auth
+    serializer_class = serializers.UserTokenSerializer

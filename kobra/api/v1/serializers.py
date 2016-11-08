@@ -5,6 +5,7 @@ from django.db.models import Count
 from django.db.models.functions import Trunc
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.serializers import PasswordResetSerializer
+from rest_social_auth.serializers import JWTSerializer
 
 from rest_framework import serializers
 from rest_framework.reverse import reverse
@@ -213,6 +214,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance = super(UserSerializer, self).create(
             validated_data=validated_data)
         PasswordResetSerializer
+
+
+class UserTokenSerializer(JWTSerializer):
+    user = serializers.HyperlinkedIdentityField('v1:user-detail')
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
